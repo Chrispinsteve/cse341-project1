@@ -8,5 +8,8 @@
   "keywords": [],
   "author": "Steve Chrispin",
   "license": "ISC",
-  "description": "My FIRST PROJECT"
+  "description": "My FIRST PROJECT",
+  "dependencies": {
+    "express": "^4.21.2"
+  }
 }
