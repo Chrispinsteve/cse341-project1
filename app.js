@@ -1,12 +1,12 @@
 const express = require('express');
 const mongodb = require('./data/database');
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
+const swaggerDocument = require('./swagger.json'); // Ensure this file exists
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
+// Middleware for JSON parsing
 app.use(express.json());
 
 // Swagger Documentation
@@ -22,6 +22,7 @@ mongodb.initDb((err) => {
     } else {
         app.listen(port, () => {
             console.log(`Server running at http://localhost:${port}`);
+            console.log(`Swagger API Docs available at http://localhost:${port}/api-docs`);
         });
     }
 });
