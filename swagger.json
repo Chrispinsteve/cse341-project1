@@ -1,0 +1,106 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Contacts API",
+      "description": "API for managing contacts"
+    },
+    "host": "localhost:3000",
+    "basePath": "/contacts",
+    "paths": {
+      "/": {
+        "get": {
+          "summary": "Get all contacts",
+          "responses": {
+            "200": {
+              "description": "List of contacts"
+            }
+          }
+        },
+        "post": {
+          "summary": "Create a new contact",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "contact",
+              "required": true,
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "firstName": { "type": "string" },
+                  "lastName": { "type": "string" },
+                  "email": { "type": "string" },
+                  "favoriteColor": { "type": "string" },
+                  "birthday": { "type": "string", "format": "date" }
+                }
+              }
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Contact created"
+            }
+          }
+        }
+      },
+      "/{id}": {
+        "get": {
+          "summary": "Get a contact by ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Contact details"
+            }
+          }
+        },
+        "put": {
+          "summary": "Update a contact",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "in": "body",
+              "name": "updates",
+              "required": true,
+              "schema": {
+                "type": "object"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Contact updated"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Delete a contact",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Contact deleted"
+            }
+          }
+        }
+      }
+    }
+  }
+  
