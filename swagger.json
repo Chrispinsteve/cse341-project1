@@ -2,8 +2,8 @@
     "swagger": "2.0",
     "info": {
       "version": "1.0.0",
-      "title": "My API",
-      "description": "API documentation"
+      "title": "Contacts API",
+      "description": "API for managing contacts"
     },
     "host": "localhost:3000",
     "basePath": "/",
@@ -13,7 +13,7 @@
           "summary": "Get all contacts",
           "responses": {
             "200": {
-              "description": "Success"
+              "description": "A list of contacts"
             }
           }
         }
