@@ -1,28 +1,24 @@
 const express = require('express');
-const mongodb = require('./data/database');
+const dotenv = require('dotenv');
+dotenv.config();
+
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json'); // Ensure this file exists
+const swaggerDocument = require('./swagger.json');
+
+const { initDb } = require('./data/database');
+const contactsRoutes = require('./routes/contactsRoutes');
 
 const app = express();
-const port = process.env.PORT || 3000;
-
-// Middleware for JSON parsing
 app.use(express.json());
+app.use('/contacts', contactsRoutes);
 
-// Swagger Documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// Routes
-app.use('/contacts', require('./routes/contacts'));
-
-// Connect to database and start server
-mongodb.initDb((err) => {
-    if (err) {
-        console.error('Failed to connect to database:', err);
-    } else {
-        app.listen(port, () => {
-            console.log(`Server running at http://localhost:${port}`);
-            console.log(`Swagger API Docs available at http://localhost:${port}/api-docs`);
-        });
-    }
+initDb((err) => {
+  if (err) {
+    console.error('Failed to connect to database', err);
+    return;
+  }
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
