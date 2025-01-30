@@ -9,6 +9,11 @@ const { initDb } = require('./data/database');
 const contactsRoutes = require('./routes/contactsRoutes');
 
 const app = express();
+
+app.get('/', (req, res) => {
+  res.send('Hello, it works With constancy!');
+});
+
 app.use(express.json());
 app.use('/contacts', contactsRoutes);
 
