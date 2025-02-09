@@ -1,32 +1,32 @@
+// Import necessary modules
 const { MongoClient } = require('mongodb');
+
+// Load environment variables
 require('dotenv').config();
 
-const mongoUrl1 = process.env.MONGODB_URL; // For project1
-const mongoUrl2 = process.env.MONGODB_PROJECTPERSO; // For projectperso
+// Initialize the MongoDB client
+let project1DB;
+let projectPersoDB;
 
-if (!mongoUrl1 || !mongoUrl2) {
-    console.error('❌ One or both MongoDB connection strings are missing! Check .env file.');
-    process.exit(1);
-}
+// Connect to MongoDB
+const connectToDatabase = async () => {
+  try {
+    // Connect to the project1 database
+    const project1Client = new MongoClient(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+    await project1Client.connect();
+    project1DB = project1Client.db('project1'); // Use the project1 database
+    console.log('✅ Connected to Project1 Database');
 
-let databases = {}; // Store database connections
-
-const connectDB = async () => {
-    try {
-        const client1 = new MongoClient(mongoUrl1, { useNewUrlParser: true, useUnifiedTopology: true });
-        await client1.connect();
-        databases.project1DB = client1.db(); // Assign the first DB
-
-        const client2 = new MongoClient(mongoUrl2, { useNewUrlParser: true, useUnifiedTopology: true });
-        await client2.connect();
-        databases.projectpersoDB = client2.db(); // Assign the second DB
-
-        console.log('✅ Connected to Project1 Database');
-        console.log('✅ Connected to ProjectPerso Database');
-    } catch (error) {
-        console.error('❌ MongoDB connection error:', error);
-        process.exit(1);
-    }
+    // Connect to the projectperso database
+    const projectPersoClient = new MongoClient(process.env.MONGODB_PROJECTPERSO, { useNewUrlParser: true, useUnifiedTopology: true });
+    await projectPersoClient.connect();
+    projectPersoDB = projectPersoClient.db('projectperso'); // Use the projectperso database
+    console.log('✅ Connected to ProjectPerso Database');
+  } catch (error) {
+    console.error('❌ Failed to connect to databases:', error);
+    throw error; // Rethrow error to handle it in app.js
+  }
 };
 
-module.exports = { connectDB, databases };
+// Export the function and DB objects
+module.exports = { connectToDatabase, project1DB, projectPersoDB };

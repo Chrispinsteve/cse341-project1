@@ -1,20 +1,18 @@
 const express = require('express');
+const { project1DB } = require('../data/database');
 const router = express.Router();
-const { databases } = require('../data/database'); // Import databases object
 
+// GET all contacts
 router.get('/', async (req, res) => {
-    try {
-        if (!databases.project1DB) {
-            return res.status(500).json({ error: 'Database connection not established' });
-        }
-
-        const collection = databases.project1DB.collection('project1'); // Use the correct collection
-        const contacts = await collection.find().toArray();
-        res.status(200).json(contacts);
-    } catch (error) {
-        console.error('❌ Error fetching contacts:', error);
-        res.status(500).json({ error: 'Server error' });
-    }
+  try {
+    const contacts = await project1DB.collection('project1').find().toArray();
+    res.status(200).json(contacts);
+  } catch (error) {
+    console.error('❌ Error fetching contacts:', error);
+    res.status(500).json({ message: 'Failed to fetch contacts' });
+  }
 });
+
+// Other CRUD routes (POST, PUT, DELETE) can follow a similar pattern
 
 module.exports = router;
