@@ -6,12 +6,14 @@ const projectpersoRoutes = require('./routes/projectpersoRoutes');
 const app = express();
 app.use(express.json());
 
-// Ensure database connects before setting up routes
-connectDB().then(() => {
+const startServer = async () => {
+    await connectDB(); // Ensure database connection first
     app.use('/contacts', contactsRoutes);
     app.use('/projectperso', projectpersoRoutes);
     console.log('✅ Routes initialized successfully');
-}).catch(err => {
+};
+
+startServer().catch((err) => {
     console.error('❌ Failed to initialize database:', err);
     process.exit(1);
 });

@@ -1,17 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { project1DB } = require('../data/database'); // Import connection
+const { databases } = require('../data/database'); // Import databases object
 
-if (!project1DB) {
-    console.error('❌ Database connection not established');
-    process.exit(1);
-}
-
-const collection = project1DB.collection('project1'); // Ensure correct collection
-
-// Example GET request
 router.get('/', async (req, res) => {
     try {
+        if (!databases.project1DB) {
+            return res.status(500).json({ error: 'Database connection not established' });
+        }
+
+        const collection = databases.project1DB.collection('project1'); // Use the correct collection
         const contacts = await collection.find().toArray();
         res.status(200).json(contacts);
     } catch (error) {

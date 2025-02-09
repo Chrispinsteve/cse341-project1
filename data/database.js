@@ -1,25 +1,25 @@
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 
-const mongoUrl1 = process.env.MONGODB_URL;
-const mongoUrl2 = process.env.MONGODB_PROJECTPERSO;
+const mongoUrl1 = process.env.MONGODB_URL; // For project1
+const mongoUrl2 = process.env.MONGODB_PROJECTPERSO; // For projectperso
 
 if (!mongoUrl1 || !mongoUrl2) {
     console.error('❌ One or both MongoDB connection strings are missing! Check .env file.');
     process.exit(1);
 }
 
-let project1DB, projectpersoDB; 
+let databases = {}; // Store database connections
 
 const connectDB = async () => {
     try {
-        const client1 = new MongoClient(mongoUrl1);
+        const client1 = new MongoClient(mongoUrl1, { useNewUrlParser: true, useUnifiedTopology: true });
         await client1.connect();
-        project1DB = client1.db(); // Connect to the default DB in `MONGODB_URL`
+        databases.project1DB = client1.db(); // Assign the first DB
 
-        const client2 = new MongoClient(mongoUrl2);
+        const client2 = new MongoClient(mongoUrl2, { useNewUrlParser: true, useUnifiedTopology: true });
         await client2.connect();
-        projectpersoDB = client2.db(); // Connect to the default DB in `MONGODB_PROJECTPERSO`
+        databases.projectpersoDB = client2.db(); // Assign the second DB
 
         console.log('✅ Connected to Project1 Database');
         console.log('✅ Connected to ProjectPerso Database');
@@ -29,5 +29,4 @@ const connectDB = async () => {
     }
 };
 
-// Export database connections
-module.exports = { connectDB, project1DB, projectpersoDB };
+module.exports = { connectDB, databases };
