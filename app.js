@@ -1,9 +1,10 @@
-// Import necessary modules
 const express = require('express');
 const dotenv = require('dotenv');
 const { connectToDatabase } = require('./data/database');
 const contactsRoutes = require('./routes/contactsRoutes');
 const projectPersoRoutes = require('./routes/projectpersoRoutes');
+const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 // Load environment variables
 dotenv.config();
@@ -12,6 +13,22 @@ console.log('✅ Environment variables loaded.');
 // Initialize the app
 const app = express();
 app.use(express.json());
+
+// Swagger setup
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Project API',
+      version: '1.0.0',
+      description: 'API documentation for the Project1 and ProjectPerso databases',
+    },
+  },
+  apis: ['./routes/*.js'], // Path to your route files for documentation
+};
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Use routes
 app.use('/api/contacts', contactsRoutes);
