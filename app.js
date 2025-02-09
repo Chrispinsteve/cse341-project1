@@ -1,26 +1,19 @@
 const express = require('express');
-const dotenv = require('dotenv');
-dotenv.config();
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger/swagger.json');
-const { initDb } = require('./data/database');
+const cors = require('cors');
+const bodyParser = require('body-parser');
 const contactsRoutes = require('./routes/contactsRoutes');
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello, the app is running!');
-});
+// Middleware
+app.use(cors());
+app.use(bodyParser.json()); // Parse incoming JSON requests
 
-app.use(express.json());
-app.use('/contacts', contactsRoutes);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// Routes
+app.use('/api/contacts', contactsRoutes);
 
-initDb((err) => {
-  if (err) {
-    console.error('Failed to connect to database', err);
-    return;
-  }
-  const PORT = process.env.PORT || 3000;
-  app.listen(PORT, "0.0.0.0", () => console.log(`Server running on port ${PORT}`));
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
