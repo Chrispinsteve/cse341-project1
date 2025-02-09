@@ -1,22 +1,19 @@
 const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config();
-
 const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
-
+const swaggerDocument = require('./swagger/swagger.json');
 const { initDb } = require('./data/database');
 const contactsRoutes = require('./routes/contactsRoutes');
 
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Hello, it works With constancy!');
+  res.send('Hello, the app is running!');
 });
 
 app.use(express.json());
 app.use('/contacts', contactsRoutes);
-
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 initDb((err) => {

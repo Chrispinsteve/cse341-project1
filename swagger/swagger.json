@@ -1,24 +1,17 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Project1 API",
-    "description": "API for managing contacts",
-    "version": "1.0.0"
+    "title": "Contacts API",
+    "version": "1.0.0",
+    "description": "API for managing contacts"
   },
-  "servers": [
-    {
-      "url": "https://cse341-project1-4jrg.onrender.com"
-    }
-  ],
   "paths": {
     "/contacts": {
       "get": {
         "summary": "Get all contacts",
-        "operationId": "getAllContacts",
-        "tags": ["contacts"],
         "responses": {
           "200": {
-            "description": "A list of contacts",
+            "description": "List of contacts",
             "content": {
               "application/json": {
                 "schema": {
@@ -34,8 +27,6 @@
       },
       "post": {
         "summary": "Create a new contact",
-        "operationId": "createContact",
-        "tags": ["contacts"],
         "requestBody": {
           "required": true,
           "content": {
@@ -49,55 +40,25 @@
         "responses": {
           "201": {
             "description": "Contact created successfully"
+          },
+          "400": {
+            "description": "Missing required fields"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
     },
     "/contacts/{id}": {
-      "get": {
-        "summary": "Get a contact by ID",
-        "operationId": "getContactById",
-        "tags": ["contacts"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "description": "The ID of the contact",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A single contact",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Contact"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Contact not found"
-          }
-        }
-      },
       "put": {
-        "summary": "Update a contact by ID",
-        "operationId": "updateContactById",
-        "tags": ["contacts"],
+        "summary": "Update an existing contact",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "The ID of the contact",
-            "schema": {
-              "type": "string"
-            }
+            "description": "ID of the contact to update"
           }
         ],
         "requestBody": {
@@ -114,24 +75,22 @@
           "200": {
             "description": "Contact updated successfully"
           },
-          "404": {
-            "description": "Contact not found"
+          "400": {
+            "description": "Missing required fields"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       },
       "delete": {
-        "summary": "Delete a contact by ID",
-        "operationId": "deleteContactById",
-        "tags": ["contacts"],
+        "summary": "Delete an existing contact",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "The ID of the contact",
-            "schema": {
-              "type": "string"
-            }
+            "description": "ID of the contact to delete"
           }
         ],
         "responses": {
@@ -140,6 +99,9 @@
           },
           "404": {
             "description": "Contact not found"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
@@ -152,30 +114,41 @@
         "properties": {
           "_id": {
             "type": "string",
-            "description": "The unique identifier for the contact"
+            "example": "67a5f3e83b4131eee6adc896"
           },
           "firstName": {
             "type": "string",
-            "description": "The first name of the contact"
+            "example": "Steve"
           },
           "lastName": {
             "type": "string",
-            "description": "The last name of the contact"
+            "example": "Chrispin"
           },
           "email": {
             "type": "string",
-            "description": "The email of the contact"
-          },
-          "favoriteColor": {
-            "type": "string",
-            "description": "The favorite color of the contact"
+            "example": "chrispinst@gmail.com"
           },
           "birthday": {
             "type": "string",
-            "description": "The birthday of the contact"
+            "example": "10-03-2000"
+          },
+          "phone": {
+            "type": "string",
+            "example": "36377634443"
+          },
+          "professionalName": {
+            "type": "string",
+            "example": "Software Engineer Student"
+          },
+          "description": {
+            "type": "string",
+            "example": "Software Engineer"
+          },
+          "studies": {
+            "type": "string",
+            "example": "Computer Science"
           }
-        },
-        "required": ["firstName", "lastName", "email", "favoriteColor", "birthday"]
+        }
       }
     }
   }
