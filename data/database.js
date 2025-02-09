@@ -1,29 +1,31 @@
 const { MongoClient } = require('mongodb');
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config(); // Load environment variables
 
-const client = new MongoClient(process.env.MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
-const clientProjectPerso = new MongoClient(process.env.MONGODB_PROJECTPERSO, { useNewUrlParser: true, useUnifiedTopology: true });
+const project1URI = process.env.MONGODB_PROJECT1;
+const projectPersoURI = process.env.MONGODB_PROJECTPERSO;
 
-let dbProject1;
-let dbProjectPerso;
+if (!project1URI || !projectPersoURI) {
+  console.error("❌ One or both MongoDB connection strings are missing! Check .env file.");
+  process.exit(1);
+}
 
-const initDb = (callback) => {
-  client.connect()
-    .then(() => {
-      console.log('✅ Project1 Database connected successfully!');
-      dbProject1 = client.db('project1');
-      return clientProjectPerso.connect();
-    })
-    .then(() => {
-      console.log('✅ ProjectPerso Database connected successfully!');
-      dbProjectPerso = clientProjectPerso.db('projectperso');
-      callback();
-    })
-    .catch((err) => {
-      console.error('❌ Database connection failed', err);
-      callback(err);
-    });
+const project1Client = new MongoClient(project1URI, { useNewUrlParser: true, useUnifiedTopology: true });
+const projectPersoClient = new MongoClient(projectPersoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+async function connectDB() {
+  try {
+    await project1Client.connect();
+    await projectPersoClient.connect();
+    console.log("✅ Connected to both Project1 and ProjectPerso databases!");
+  } catch (error) {
+    console.error("❌ MongoDB connection error:", error);
+    process.exit(1);
+  }
+}
+
+connectDB();
+
+module.exports = {
+  project1DB: project1Client.db('project1'),
+  projectPersoDB: projectPersoClient.db('projectperso')
 };
-
-module.exports = { dbProject1, dbProjectPerso, initDb };

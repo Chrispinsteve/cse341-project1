@@ -1,19 +1,16 @@
 const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-const contactsRoutes = require('./routes/contactsRoutes');
-
 const app = express();
+require('dotenv').config();
+const cors = require('cors');
 
-// Middleware
+app.use(express.json());
 app.use(cors());
-app.use(bodyParser.json()); // Parse incoming JSON requests
 
-// Routes
-app.use('/api/contacts', contactsRoutes);
+const contactsRoutes = require('./routes/contactsRoutes'); 
+const projectpersoRoutes = require('./routes/projectpersoRoutes'); 
 
-// Start the server
+app.use('/api/contacts', contactsRoutes); 
+app.use('/api/projectperso', projectpersoRoutes); 
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));

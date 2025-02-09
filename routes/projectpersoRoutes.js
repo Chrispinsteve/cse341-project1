@@ -1,11 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const projectpersoController = require('../controllers/projectpersoController');
+const { projectPersoDB } = require('../data/database');
 
-// Define routes for projectperso
-router.post('/', projectpersoController.createProjectPerso);
-router.get('/', projectpersoController.getAllProjects);
-router.put('/:id', projectpersoController.updateProject);
-router.delete('/:id', projectpersoController.deleteProject);
+const collection = projectPersoDB.collection('projectperso'); // Ensure correct collection
+
+router.get('/', async (req, res) => {
+  try {
+    const contacts = await collection.find().toArray();
+    res.status(200).json(contacts);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch contacts from ProjectPerso" });
+  }
+});
 
 module.exports = router;
